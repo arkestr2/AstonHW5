@@ -1,3 +1,5 @@
+import model.Movie;
+
 void main() {
     Movie movie = new Movie.Builder()
             .name("Молчание Ягнят")
