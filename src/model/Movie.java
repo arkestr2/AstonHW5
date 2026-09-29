@@ -1,3 +1,5 @@
+package model;
+
 public final class Movie {
     private final String name;
     private final String genre;
