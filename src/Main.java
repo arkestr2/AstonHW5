@@ -1,4 +1,5 @@
 import model.Movie;
+import model.MovieCollection;
 
 void main() {
     Movie movie = new Movie.Builder()
@@ -7,5 +8,8 @@ void main() {
             .releaseYear(1991)
             .build();
 
-    System.out.println(movie.getName());
+    MovieCollection<Movie> movieCollection = new MovieCollection<Movie>();
+    movieCollection.add(movie);
+
+    System.out.println(movieCollection.get(0).getName());
 }

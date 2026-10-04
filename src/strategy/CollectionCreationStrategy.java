@@ -1,9 +1,8 @@
 package strategy;
 
 import model.Movie;
-
-import java.util.ArrayList;
+import model.MovieCollection;
 
 public interface CollectionCreationStrategy {
-    ArrayList<Movie> create();
+    MovieCollection<Movie> create();
 }
