@@ -2,14 +2,37 @@ import model.Movie;
 import model.MovieCollection;
 
 void main() {
-    Movie movie = new Movie.Builder()
-            .name("Молчание Ягнят")
+    Movie movie1 = new Movie.Builder()
+            .name("A")
             .genre("Хоррор")
             .releaseYear(1991)
             .build();
 
-    MovieCollection<Movie> movieCollection = new MovieCollection<Movie>();
-    movieCollection.add(movie);
+    Movie movie2 = new Movie.Builder()
+            .name("B")
+            .genre("Комедия")
+            .releaseYear(2002)
+            .build();
 
-    System.out.println(movieCollection.get(0).getName());
+    Movie movie3 = new Movie.Builder()
+            .name("C")
+            .genre("Драма")
+            .releaseYear(1968)
+            .build();
+
+    MovieCollection<Movie> movieCollection = Stream.of(movie1, movie2, movie3)
+            .collect(Collectors.toCollection(MovieCollection::new));
+
+    System.out.println("----------------Sorted by year----------------");
+    movieCollection.sort(Comparator.comparingInt(Movie::getReleaseYear));
+    movieCollection.stream().forEach(m -> System.out.println(m.getReleaseYear()));
+
+    System.out.println("----------------Sorted by name----------------");
+    movieCollection.sort(Comparator.comparing(Movie::getName));
+    movieCollection.stream().forEach(m -> System.out.println(m.getName()));
+
+
+    System.out.println("----------------Sorted by genre----------------");
+    movieCollection.sort(Comparator.comparing(Movie::getGenre));
+    movieCollection.stream().forEach(m -> System.out.println(m.getGenre()));
 }
