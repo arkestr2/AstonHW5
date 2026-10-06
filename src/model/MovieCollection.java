@@ -39,7 +39,32 @@ public final class MovieCollection extends AbstractList<Movie> {
         mergeSort(0, internalList.size() - 1, c);
     }
 
-    private void mergeSort(int left, int right, Comparator<? super M> c) {
+    public void sortByOnlyEvenYear() {
+        MovieCollection toSort = new MovieCollection();
+        MovieCollection toKeep = new MovieCollection();
+
+        for (Movie movie : internalList) {
+            if (movie.getReleaseYear() % 2 == 0) {
+                toSort.add(movie);
+            } else {
+                toKeep.add(movie);
+            }
+        }
+
+        toSort.sort(Comparator.comparingInt(Movie::getReleaseYear));
+
+        int keepPointer = 0;
+        int sortPointer = 0;
+        for (int i = 0; i < internalList.size(); i++) {
+            if (keepPointer < toKeep.size() && internalList.get(i) == toKeep.get(keepPointer)) {
+                keepPointer++;
+            } else if (sortPointer < toSort.size()) {
+                internalList.set(i, toSort.get(sortPointer++));
+            }
+        }
+    }
+
+    private void mergeSort(int left, int right, Comparator<? super Movie> c) {
         if (left >= right) {
             return;
         }
