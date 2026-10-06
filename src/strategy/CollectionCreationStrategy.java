@@ -4,5 +4,5 @@ import model.Movie;
 import model.MovieCollection;
 
 public interface CollectionCreationStrategy {
-    MovieCollection<Movie> create();
+    MovieCollection create();
 }
