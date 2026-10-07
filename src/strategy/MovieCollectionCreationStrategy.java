@@ -1,8 +1,7 @@
 package strategy;
 
-import model.Movie;
 import model.MovieCollection;
 
-public interface CollectionCreationStrategy {
+public interface MovieCollectionCreationStrategy {
     MovieCollection create();
 }

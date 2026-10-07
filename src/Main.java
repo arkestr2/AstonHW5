@@ -1,11 +1,10 @@
-import model.Movie;
 import model.MovieCollection;
-import strategy.CollectionCreationStrategy;
+import strategy.MovieCollectionCreationStrategy;
 import strategy.FileStrategy;
 import strategy.MovieCollectionCreator;
 
 void main() {
-    CollectionCreationStrategy strategy = new FileStrategy("movies.txt");
+    MovieCollectionCreationStrategy strategy = new FileStrategy("movies.txt");
     MovieCollectionCreator creator = new MovieCollectionCreator(strategy);
 
     MovieCollection movieCollection = creator.create();

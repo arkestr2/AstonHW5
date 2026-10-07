@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FileStrategy implements CollectionCreationStrategy {
+public class FileStrategy implements MovieCollectionCreationStrategy {
 
     private final String filePath;
 

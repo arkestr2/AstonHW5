@@ -4,13 +4,13 @@ import model.MovieCollection;
 
 public class MovieCollectionCreator {
 
-    private CollectionCreationStrategy strategy;
+    private MovieCollectionCreationStrategy strategy;
 
-    public MovieCollectionCreator(CollectionCreationStrategy strategy) {
+    public MovieCollectionCreator(MovieCollectionCreationStrategy strategy) {
         this.strategy = strategy;
     }
 
-    public void setStrategy(CollectionCreationStrategy strategy) {
+    public void setStrategy(MovieCollectionCreationStrategy strategy) {
         this.strategy = strategy;
     }
 
