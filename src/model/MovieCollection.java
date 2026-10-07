@@ -2,15 +2,15 @@ package model;
 
 import java.util.*;
 
-public final class MovieCollection<M> extends AbstractList<M> {
-    private final List<M> internalList = new ArrayList<>();
+public final class MovieCollection extends AbstractList<Movie> {
+    private final List<Movie> internalList = new ArrayList<>();
 
-    public MovieCollection(M... items) {
+    public MovieCollection(Movie... items) {
         Collections.addAll(internalList, items);
     }
 
     @Override
-    public M get(int index) {
+    public Movie get(int index) {
         return internalList.get(index);
     }
 
@@ -20,26 +20,45 @@ public final class MovieCollection<M> extends AbstractList<M> {
     }
 
     @Override
-    public void add(int index, M element) {
+    public void add(int index, Movie element) {
         internalList.add(index, element);
     }
 
     @Override
-    public M set(int index, M element) {
+    public Movie set(int index, Movie element) {
         return internalList.set(index, element);
     }
 
     @Override
-    public M remove(int index) {
+    public Movie remove(int index) {
         return internalList.remove(index);
     }
 
     @Override
-    public void sort(Comparator<? super M> c) {
+    public void sort(Comparator<? super Movie> c) {
         mergeSort(0, internalList.size() - 1, c);
     }
 
-    private void mergeSort(int left, int right, Comparator<? super M> c) {
+    public void sortByOnlyEvenYear() {
+        MovieCollection toSort = new MovieCollection();
+        List<Integer> toSortIndexes = new ArrayList<>();
+
+        for (int i = 0; i < internalList.size(); i++) {
+            Movie movie = internalList.get(i);
+            if (movie.getReleaseYear() % 2 == 0) {
+                toSort.add(movie);
+                toSortIndexes.add(i);
+            }
+        }
+
+        toSort.sort(Comparator.comparingInt(Movie::getReleaseYear));
+
+        for (int i = 0; i < toSortIndexes.size(); i++) {
+            internalList.set(toSortIndexes.get(i), toSort.get(i));
+        }
+    }
+
+    private void mergeSort(int left, int right, Comparator<? super Movie> c) {
         if (left >= right) {
             return;
         }
@@ -50,9 +69,9 @@ public final class MovieCollection<M> extends AbstractList<M> {
         merge(left, mid, right, c);
     }
 
-    private void merge(int left, int mid, int right, Comparator<? super M> c) {
-        List<M> leftHalf = new ArrayList<>(internalList.subList(left, mid + 1));
-        List<M> rightHalf = new ArrayList<>(internalList.subList(mid + 1, right + 1));
+    private void merge(int left, int mid, int right, Comparator<? super Movie> c) {
+        List<Movie> leftHalf = new ArrayList<>(internalList.subList(left, mid + 1));
+        List<Movie> rightHalf = new ArrayList<>(internalList.subList(mid + 1, right + 1));
 
         int leftPointer = 0;
         int rightPointer = 0;
