@@ -41,26 +41,20 @@ public final class MovieCollection extends AbstractList<Movie> {
 
     public void sortByOnlyEvenYear() {
         MovieCollection toSort = new MovieCollection();
-        MovieCollection toKeep = new MovieCollection();
+        List<Integer> toSortIndexes = new ArrayList<>();
 
-        for (Movie movie : internalList) {
+        for (int i = 0; i < internalList.size(); i++) {
+            Movie movie = internalList.get(i);
             if (movie.getReleaseYear() % 2 == 0) {
                 toSort.add(movie);
-            } else {
-                toKeep.add(movie);
+                toSortIndexes.add(i);
             }
         }
 
         toSort.sort(Comparator.comparingInt(Movie::getReleaseYear));
 
-        int keepPointer = 0;
-        int sortPointer = 0;
-        for (int i = 0; i < internalList.size(); i++) {
-            if (keepPointer < toKeep.size() && internalList.get(i) == toKeep.get(keepPointer)) {
-                keepPointer++;
-            } else if (sortPointer < toSort.size()) {
-                internalList.set(i, toSort.get(sortPointer++));
-            }
+        for (int i = 0; i < toSortIndexes.size(); i++) {
+            internalList.set(toSortIndexes.get(i), toSort.get(i));
         }
     }
 
