@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public final class Movie {
     private final String name;
     private final String genre;
@@ -58,5 +60,30 @@ public final class Movie {
 
             return new Movie(this);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "%s/%s/%s".formatted(name, genre, releaseYear);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj instanceof Movie movie) {
+            return Objects.equals(name, movie.name)
+                    && Objects.equals(genre, movie.genre)
+                    && releaseYear == movie.releaseYear;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, genre, releaseYear);
     }
 }

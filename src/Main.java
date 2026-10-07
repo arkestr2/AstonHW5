@@ -20,19 +20,25 @@ void main() {
             .releaseYear(1968)
             .build();
 
-    MovieCollection<Movie> movieCollection = Stream.of(movie1, movie2, movie3)
+    MovieCollection movieCollection = Stream.of(movie1, movie2, movie3)
             .collect(Collectors.toCollection(MovieCollection::new));
+
+    System.out.println("----------------Unsorted----------------");
+    movieCollection.stream().forEach(System.out::println);
+
+    System.out.println("----------------Sorted by only even year----------------");
+    movieCollection.sortByOnlyEvenYear();
+    movieCollection.stream().forEach(System.out::println);
 
     System.out.println("----------------Sorted by year----------------");
     movieCollection.sort(Comparator.comparingInt(Movie::getReleaseYear));
-    movieCollection.stream().forEach(m -> System.out.println(m.getReleaseYear()));
+    movieCollection.stream().forEach(System.out::println);
 
     System.out.println("----------------Sorted by name----------------");
     movieCollection.sort(Comparator.comparing(Movie::getName));
-    movieCollection.stream().forEach(m -> System.out.println(m.getName()));
-
+    movieCollection.stream().forEach(System.out::println);
 
     System.out.println("----------------Sorted by genre----------------");
     movieCollection.sort(Comparator.comparing(Movie::getGenre));
-    movieCollection.stream().forEach(m -> System.out.println(m.getGenre()));
+    movieCollection.stream().forEach(System.out::println);
 }
