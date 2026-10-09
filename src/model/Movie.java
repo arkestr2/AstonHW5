@@ -64,7 +64,7 @@ public final class Movie {
 
     @Override
     public String toString() {
-        return "%s/%s/%s".formatted(name, genre, releaseYear);
+        return "%s;%s;%s".formatted(name, genre, releaseYear);
     }
 
     @Override
