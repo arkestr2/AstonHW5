@@ -2,13 +2,20 @@ import model.MovieCollection;
 import strategy.MovieCollectionCreationStrategy;
 import strategy.FileStrategy;
 import strategy.MovieCollectionCreator;
+import strategy.RandomStrategy;
 
 void main() {
-    MovieCollectionCreationStrategy strategy = new FileStrategy("movies.txt");
+    MovieCollectionCreationStrategy strategy = new RandomStrategy(new FileStrategy("internal_movies.txt"));
     MovieCollectionCreator creator = new MovieCollectionCreator(strategy);
 
     MovieCollection movieCollection = creator.create();
     movieCollection.stream().forEach(System.out::println);
+
+//    MovieCollectionCreationStrategy strategy = new FileStrategy("user_movies.txt");
+//    MovieCollectionCreator creator = new MovieCollectionCreator(strategy);
+//
+//    MovieCollection movieCollection = creator.create();
+//    movieCollection.stream().forEach(System.out::println);
 
 //    Movie movie1 = new Movie.Builder()
 //            .name("A")
