@@ -3,12 +3,14 @@ import strategy.MovieCollectionCreationStrategy;
 import strategy.FileStrategy;
 import strategy.MovieCollectionCreator;
 import strategy.RandomStrategy;
+import utils.MovieCollectionUtils;
 
 void main() {
     MovieCollectionCreationStrategy strategy = new RandomStrategy(new FileStrategy("internal_movies.txt"));
     MovieCollectionCreator creator = new MovieCollectionCreator(strategy);
 
     MovieCollection movieCollection = creator.create();
+    MovieCollectionUtils.saveToFile(movieCollection, "saved_movies.txt");
     movieCollection.stream().forEach(System.out::println);
 
 //    MovieCollectionCreationStrategy strategy = new FileStrategy("user_movies.txt");
