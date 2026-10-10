@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public final class Movie {
@@ -47,15 +48,17 @@ public final class Movie {
 
         public Movie build() {
             if (name == null || name.isBlank()) {
-                throw new IllegalStateException("Название фильма это обязательное поле");
+                throw new IllegalArgumentException("Название фильма это обязательное поле");
             }
 
             if (genre == null || genre.isBlank()) {
-                throw new IllegalStateException("Жанр фильма это обязательное поле");
+                throw new IllegalArgumentException("Жанр фильма это обязательное поле");
             }
 
             if (releaseYear <= 1895) {
-                throw new IllegalStateException("Год выпуска фильма не может быть раньше первого в истории фильма");
+                throw new IllegalArgumentException("Год выпуска фильма не может быть раньше первого в истории фильма");
+            } else if (releaseYear > LocalDate.now().getYear()) {
+                throw new IllegalArgumentException("Год выпуска фильма не может быть в будущем");
             }
 
             return new Movie(this);

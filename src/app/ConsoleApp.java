@@ -125,8 +125,7 @@ public class ConsoleApp {
                         System.out.println("Похоже, вы ввели неподходящий ответ. Попробуйте снова");
                         break;
                 }
-            }
-            catch (RuntimeException e) {
+            } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
         }
