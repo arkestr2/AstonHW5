@@ -20,12 +20,26 @@ public class FileStrategy implements MovieCollectionCreationStrategy {
     @Override
     public MovieCollection create() {
         try (Stream<String> stream = Files.lines(filePath)) {
-            return stream.map(line -> line.split(";"))
-                    .map(fields -> new Movie.Builder()
-                            .name(fields[0])
-                            .genre(fields[1])
-                            .releaseYear(Integer.parseInt(fields[2]))
-                            .build())
+            return stream
+                    .filter(line -> !line.isBlank())
+                    .map(line -> {
+                        String[] fields = line.split(";");
+                        if (fields.length != 3) {
+                            throw new IllegalArgumentException("Некорректная строка в файле %s: %s".formatted(filePath, line));
+                        }
+
+                        try {
+                            return new Movie.Builder()
+                                    .name(fields[0].trim())
+                                    .genre(fields[1].trim())
+                                    .releaseYear(Integer.parseInt(fields[2].trim()))
+                                    .build();
+                        } catch (NumberFormatException e) {
+                            throw new IllegalArgumentException("Год должен быть числом (файл: %s, строка: %s)".formatted(filePath, line));
+                        } catch (IllegalArgumentException e) {
+                            throw new IllegalArgumentException(e.getMessage() + " (файл: %s, строка: %s)".formatted(filePath, line));
+                        }
+                    })
                     .collect(Collectors.toCollection(MovieCollection::new));
         } catch (IOException e) {
             throw new IllegalStateException("Не удалось прочитать фильмы из файла: " + filePath, e);
