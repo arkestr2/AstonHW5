@@ -21,7 +21,7 @@ public class ConsoleApp {
     private static MovieCollection movieCollection;
     private static Path outputFilePath;
 
-    public static void startApp() {
+    public static void run() {
         System.out.println("""
             
             Приветствуем в приложении по созданию и сортировке коллекций фильмов!
