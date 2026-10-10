@@ -11,15 +11,15 @@ import java.util.stream.Stream;
 
 public class FileStrategy implements MovieCollectionCreationStrategy {
 
-    private final String filePath;
+    private final Path filePath;
 
-    public FileStrategy(String filePath) {
+    public FileStrategy(Path filePath) {
         this.filePath = filePath;
     }
 
     @Override
     public MovieCollection create() {
-        try (Stream<String> stream = Files.lines(Path.of(filePath))) {
+        try (Stream<String> stream = Files.lines(filePath)) {
             return stream.map(line -> line.split(";"))
                     .map(fields -> new Movie.Builder()
                             .name(fields[0])
