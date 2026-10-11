@@ -12,9 +12,15 @@ import java.util.stream.Stream;
 public class FileStrategy implements MovieCollectionCreationStrategy {
 
     private final Path filePath;
+    private final int size;
 
     public FileStrategy(Path filePath) {
+        this(filePath, Integer.MAX_VALUE);
+    }
+
+    public FileStrategy(Path filePath, int size) {
         this.filePath = filePath;
+        this.size = size;
     }
 
     @Override
@@ -22,6 +28,7 @@ public class FileStrategy implements MovieCollectionCreationStrategy {
         try (Stream<String> stream = Files.lines(filePath)) {
             return stream
                     .filter(line -> !line.isBlank())
+                    .limit(size)
                     .map(line -> {
                         String[] fields = line.split(";");
                         if (fields.length != 3) {
