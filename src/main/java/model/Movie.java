@@ -55,7 +55,7 @@ public final class Movie {
                 throw new IllegalArgumentException("Жанр фильма это обязательное поле");
             }
 
-            if (releaseYear <= 1895) {
+            if (releaseYear < 1895) {
                 throw new IllegalArgumentException("Год выпуска фильма не может быть раньше первого в истории фильма");
             } else if (releaseYear > LocalDate.now().getYear()) {
                 throw new IllegalArgumentException("Год выпуска фильма не может быть в будущем");
