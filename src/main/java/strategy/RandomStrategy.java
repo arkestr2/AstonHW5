@@ -3,15 +3,16 @@ package strategy;
 import model.MovieCollection;
 
 import java.util.Collections;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class RandomStrategy implements MovieCollectionCreationStrategy {
 
     private final MovieCollectionCreationStrategy source;
+    private final int size;
 
-    public RandomStrategy(MovieCollectionCreationStrategy source) {
+    public RandomStrategy(MovieCollectionCreationStrategy source, int size) {
         this.source = source;
+        this.size = size;
     }
 
     @Override
@@ -19,9 +20,8 @@ public class RandomStrategy implements MovieCollectionCreationStrategy {
         MovieCollection movies = source.create();
         Collections.shuffle(movies);
 
-        Random random = new Random();
         return movies.stream()
-                .limit(random.nextInt(3, 7))
+                .limit(size)
                 .collect(Collectors.toCollection(MovieCollection::new));
     }
 }

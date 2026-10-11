@@ -10,15 +10,16 @@ import java.util.stream.IntStream;
 public class ManualStrategy implements MovieCollectionCreationStrategy {
 
     private final Scanner scanner;
+    private final int size;
 
-    public ManualStrategy(Scanner scanner) {
+    public ManualStrategy(Scanner scanner, int size) {
         this.scanner = scanner;
+        this.size = size;
     }
 
     @Override
     public MovieCollection create() {
-        int count = askPositiveInt("Сколько фильмов хотите добавить? ");
-        return IntStream.range(0, count)
+        return IntStream.range(0, size)
                 .mapToObj(i -> askMovie(i + 1))
                 .collect(Collectors.toCollection(MovieCollection::new));
     }
@@ -38,15 +39,6 @@ public class ManualStrategy implements MovieCollectionCreationStrategy {
             } catch (IllegalArgumentException e) {
                 System.out.println("Ошибка: " + e.getMessage() + ". Попробуйте снова.");
             }
-        }
-    }
-    private int askPositiveInt(String prompt) {
-        while (true) {
-            int value = askInt(prompt);
-            if (value > 0) {
-                return value;
-            }
-            System.out.println("Число должно быть больше нуля. Попробуйте снова.");
         }
     }
 

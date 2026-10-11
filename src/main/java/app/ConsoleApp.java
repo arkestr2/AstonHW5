@@ -106,19 +106,29 @@ public class ConsoleApp {
 
             String input = scanner.nextLine().trim();
             try {
+                int size;
                 switch (input) {
                     case "1":
+                        size = ConsoleAppUtils.askDesiredCollectionSize(scanner);
                         System.out.println("Введите название файла (без расширения), который будет использован для создания коллекции");
                         input = scanner.nextLine().trim();
-                        creator.setStrategy(new FileStrategy(Path.of("data","%s.txt".formatted(input))));
+                        creator.setStrategy(new FileStrategy(Path.of("data","%s.txt".formatted(input)), size));
                         movieCollection = creator.create();
+                        if (movieCollection.size() < size) {
+                            System.out.printf("В файле нашлось только %d фильмов из %d запрошенных%n", movieCollection.size(), size);
+                        }
                         return true;
                     case "2":
-                        creator.setStrategy(new RandomStrategy(new FileStrategy(Path.of("data", "internal_movies.txt"))));
+                        size = ConsoleAppUtils.askDesiredCollectionSize(scanner);
+                        creator.setStrategy(new RandomStrategy(new FileStrategy(Path.of("data", "internal_movies.txt")), size));
                         movieCollection = creator.create();
+                        if (movieCollection.size() < size) {
+                            System.out.printf("Во внутренней коллекции фильмов нашлось только %d фильмов из %d запрошенных%n", movieCollection.size(), size);
+                        }
                         return true;
                     case "3":
-                        creator.setStrategy(new ManualStrategy(scanner));
+                        size = ConsoleAppUtils.askDesiredCollectionSize(scanner);
+                        creator.setStrategy(new ManualStrategy(scanner, size));
                         movieCollection = creator.create();
                         return true;
                     case "0":
