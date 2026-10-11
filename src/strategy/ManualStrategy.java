@@ -24,10 +24,10 @@ public class ManualStrategy implements MovieCollectionCreationStrategy {
     }
 
     private Movie askMovie(int index) {
-        System.out.printf("Фильм #%d%n", index);
+        System.out.printf("%nФильм #%d%n", index);
+        String name = askNonEmptyString("Название: ");
+        String genre = askNonEmptyString("Жанр: ");
         while (true) {
-            String name = askNonEmptyString("Название: ");
-            String genre = askNonEmptyString("Жанр: ");
             int year = askInt("Год выпуска: ");
             try {
                 return new Movie.Builder()
@@ -35,7 +35,7 @@ public class ManualStrategy implements MovieCollectionCreationStrategy {
                         .genre(genre)
                         .releaseYear(year)
                         .build();
-            } catch (IllegalStateException e) {
+            } catch (IllegalArgumentException e) {
                 System.out.println("Ошибка: " + e.getMessage() + ". Попробуйте снова.");
             }
         }

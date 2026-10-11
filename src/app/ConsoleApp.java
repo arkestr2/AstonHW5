@@ -3,6 +3,7 @@ package app;
 import model.Movie;
 import model.MovieCollection;
 import strategy.FileStrategy;
+import strategy.ManualStrategy;
 import strategy.MovieCollectionCreator;
 import strategy.RandomStrategy;
 import utils.MovieCollectionUtils;
@@ -30,7 +31,7 @@ public class ConsoleApp {
                 1. Создавать свою коллекцию фильмов тремя способами:
                     1.1 Из текстового файла, строки которого заполнены в формате: [Название фильма];[Жанр фильма];[Год выпуска фильма]
                     1.2 Заполнить случайными фильмами из нашей внутренней коллекции
-                    1.3 [WIP] Ввести фильмы по очереди вручную
+                    1.3 Ввести фильмы по очереди вручную
         
                 2. Сортировать созданную коллекцию четырьмя способами:
                     2.1 В алфавитном порядке по названию
@@ -96,7 +97,7 @@ public class ConsoleApp {
                     1. Выберите способ создания коллекции (0-3):
                         1. Из текстового файла, строки которого заполнены в формате: [Название фильма];[Жанр фильма];[Год выпуска фильма]
                         2. Заполнить случайными фильмами из нашей внутренней коллекции
-                        3. [WIP] Ввести фильмы по очереди вручную
+                        3. Ввести фильмы по очереди вручную
             
                         0. Выйти
                     """);
@@ -117,8 +118,9 @@ public class ConsoleApp {
                         movieCollection = creator.create();
                         return true;
                     case "3":
-                        System.out.println("WIP");
-                        break;
+                        creator.setStrategy(new ManualStrategy(scanner));
+                        movieCollection = creator.create();
+                        return true;
                     case "0":
                         return false;
                     default:
@@ -126,7 +128,7 @@ public class ConsoleApp {
                         break;
                 }
             } catch (RuntimeException e) {
-                System.out.println(e.getMessage());
+                System.out.println(e.getMessage() != null ? e.getMessage() : "Ввод неожиданно завершён. Попробуйте снова");
             }
         }
     }
