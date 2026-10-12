@@ -6,7 +6,7 @@ import strategy.FileStrategy;
 import strategy.ManualStrategy;
 import strategy.MovieCollectionCreator;
 import strategy.RandomStrategy;
-import utils.MovieCollectionUtils;
+import model.MovieCollectionUtils;
 
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -41,7 +41,7 @@ public class ConsoleApp {
         
                 3. [WIP] Подсчитать количество вхождений элемента в коллекции
         
-                4. Сохранить созданную коллекцию в текстовый файл
+                4. Сохранить созданную коллекцию в текстовый файл в режиме добавления данных
         
             Хотите начать? (Y/N) (по умолчанию: Y)
             """);
@@ -73,7 +73,7 @@ public class ConsoleApp {
                 return;
             }
 
-            if (!tryAskSaveToFile()) {
+            if (!tryAskAppendToFile()) {
                 return;
             }
 
@@ -109,7 +109,7 @@ public class ConsoleApp {
                 int size;
                 switch (input) {
                     case "1":
-                        size = ConsoleAppUtils.askDesiredCollectionSize(scanner);
+                        size = ConsoleAppUtils.tryAskDesiredCollectionSize(scanner);
                         System.out.println("Введите название файла (без расширения), который будет использован для создания коллекции");
                         input = scanner.nextLine().trim();
                         creator.setStrategy(new FileStrategy(Path.of("data","%s.txt".formatted(input)), size));
@@ -119,7 +119,7 @@ public class ConsoleApp {
                         }
                         return true;
                     case "2":
-                        size = ConsoleAppUtils.askDesiredCollectionSize(scanner);
+                        size = ConsoleAppUtils.tryAskDesiredCollectionSize(scanner);
                         creator.setStrategy(new RandomStrategy(new FileStrategy(Path.of("data", "internal_movies.txt")), size));
                         movieCollection = creator.create();
                         if (movieCollection.size() < size) {
@@ -127,7 +127,7 @@ public class ConsoleApp {
                         }
                         return true;
                     case "3":
-                        size = ConsoleAppUtils.askDesiredCollectionSize(scanner);
+                        size = ConsoleAppUtils.tryAskDesiredCollectionSize(scanner);
                         creator.setStrategy(new ManualStrategy(scanner, size));
                         movieCollection = creator.create();
                         return true;
@@ -205,10 +205,10 @@ public class ConsoleApp {
         }
     }
 
-    private static boolean tryAskSaveToFile() {
+    private static boolean tryAskAppendToFile() {
         while (true) {
             System.out.println("""            
-                    4. Сохранить созданную коллекцию в текстовый файл? (Y/N) (по умолчанию: Y)
+                    4. Сохранить созданную коллекцию в текстовый файл в режиме добавления данных? (Y/N) (по умолчанию: Y)
                         0. Выйти
                     """);
 
@@ -219,7 +219,7 @@ public class ConsoleApp {
                     System.out.println("Введите название файла (без расширения), в который нужно сохранить коллекцию");
                     input = scanner.nextLine().trim();
                     outputFilePath = Path.of("data", "%s.txt".formatted(input));
-                    MovieCollectionUtils.saveToFile(movieCollection, outputFilePath);
+                    MovieCollectionUtils.appendToFile(movieCollection, outputFilePath);
                     return true;
                 case "n":
                     return true;
