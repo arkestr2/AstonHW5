@@ -39,7 +39,7 @@ public class ConsoleApp {
                     2.3 В натуральном порядке по году выпуска
                     2.4 В натуральном порядке по году выпуска ТОЛЬКО фильмы с четными годами. С нечетными - останутся на месте
         
-                3. [WIP] Подсчитать количество вхождений элемента в коллекции
+                3. Подсчитать количество вхождений элемента в коллекции
         
                 4. Сохранить созданную коллекцию в текстовый файл в режиме добавления данных
         
@@ -95,7 +95,7 @@ public class ConsoleApp {
         while (true) {
             System.out.println("""
                     1. Выберите способ создания коллекции (0-3):
-                        1. Из текстового файла, строки которого заполнены в формате: [Название фильма];[Жанр фильма];[Год выпуска фильма]
+                        1. Из текстового файла, строки которого заполнены в формате: [Название фильма;Жанр фильма;Год выпуска фильма]
                         2. Заполнить случайными фильмами из нашей внутренней коллекции
                         3. Ввести фильмы по очереди вручную
             
@@ -184,16 +184,19 @@ public class ConsoleApp {
     private static boolean tryAskCountElement() {
         while (true) {
             System.out.println("""
-                    3. [WIP] Подсчитать количество вхождений элемента в коллекции? (Y/N) (по умолчанию: N)
+                    3. Подсчитать количество вхождений элемента в коллекции? (Y/N) (по умолчанию: Y)
                         0. Выйти
                     """);
 
             String input = scanner.nextLine().trim().toLowerCase();
             switch (input) {
-                case "y":
-                    //WIP
-                    return true;
                 case "":
+                case "y":
+                    Movie target = askMovieElement();
+                    movieCollection.countOccurrencesAsync(target)
+                            .thenAccept(count -> System.out.printf("%nКоличество вхождений элемента в коллекции: %d%n%n", count))
+                            .join();
+                    return true;
                 case "n":
                     return true;
                 case "0":
@@ -201,6 +204,30 @@ public class ConsoleApp {
                 default:
                     System.out.println("Похоже, вы ввели неподходящий ответ. Попробуйте снова");
                     break;
+            }
+        }
+    }
+
+    private static Movie askMovieElement() {
+        while (true) {
+            System.out.println("Введите элемент в формате: [Название фильма;Жанр фильма;Год выпуска фильма]:");
+            String line = scanner.nextLine().trim();
+            String[] fields = line.split(";");
+            if (fields.length != 3) {
+                System.out.println("Некорректный формат. Попробуйте снова");
+                continue;
+            }
+
+            try {
+                return new Movie.Builder()
+                        .name(fields[0].trim())
+                        .genre(fields[1].trim())
+                        .releaseYear(Integer.parseInt(fields[2].trim()))
+                        .build();
+            } catch (NumberFormatException e) {
+                System.out.println("Год должен быть числом. Попробуйте снова");
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + ". Попробуйте снова");
             }
         }
     }
@@ -216,7 +243,7 @@ public class ConsoleApp {
             switch (input) {
                 case "":
                 case "y":
-                    System.out.println("Введите название файла (без расширения), в который нужно сохранить коллекцию");
+                    System.out.println("Введите название файла (без расширения), в который нужно сохранить коллекцию:");
                     input = scanner.nextLine().trim();
                     outputFilePath = Path.of("data", "%s.txt".formatted(input));
                     MovieCollectionUtils.appendToFile(movieCollection, outputFilePath);
