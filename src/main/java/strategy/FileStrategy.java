@@ -26,7 +26,7 @@ public class FileStrategy implements MovieCollectionCreationStrategy {
     @Override
     public MovieCollection create() {
         try (Stream<String> stream = Files.lines(filePath)) {
-            return stream
+            MovieCollection movies = stream
                     .filter(line -> !line.isBlank())
                     .limit(size)
                     .map(line -> {
@@ -48,6 +48,11 @@ public class FileStrategy implements MovieCollectionCreationStrategy {
                         }
                     })
                     .collect(Collectors.toCollection(MovieCollection::new));
+
+            if (movies.isEmpty()) {
+                throw new IllegalStateException("В файле %s не найдено ни одного фильма".formatted(filePath));
+            }
+            return movies;
         } catch (IOException e) {
             throw new IllegalStateException("Не удалось прочитать фильмы из файла: " + filePath, e);
         }
