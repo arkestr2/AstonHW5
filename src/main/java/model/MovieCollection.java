@@ -1,8 +1,11 @@
 package model;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public final class MovieCollection extends AbstractList<Movie> {
+    private static final int COUNT_CHUNK_SIZE = 8;
+
     private final List<Movie> internalList = new ArrayList<>();
 
     public MovieCollection(Movie... items) {
@@ -56,6 +59,30 @@ public final class MovieCollection extends AbstractList<Movie> {
         for (int i = 0; i < toSortIndexes.size(); i++) {
             internalList.set(toSortIndexes.get(i), toSort.get(i));
         }
+    }
+
+    public CompletableFuture<Integer> countOccurrencesAsync(Movie target) {
+        return countOccurrencesAsync(target, 0, size());
+    }
+
+    private CompletableFuture<Integer> countOccurrencesAsync(Movie target, int from, int to) {
+        if (to - from <= COUNT_CHUNK_SIZE) {
+            return CompletableFuture.supplyAsync(() -> countRange(target, from, to));
+        }
+
+        int mid = from + (to - from) / 2;
+        return countOccurrencesAsync(target, from, mid)
+                .thenCombine(countOccurrencesAsync(target, mid, to), Integer::sum);
+    }
+
+    private int countRange(Movie target, int from, int to) {
+        int count = 0;
+        for (int i = from; i < to; i++) {
+            if (target.equals(get(i))) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private void mergeSort(int left, int right, Comparator<? super Movie> c) {

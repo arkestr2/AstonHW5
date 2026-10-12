@@ -102,6 +102,39 @@ class MovieCollectionTest {
         assertEquals(INTERSTELLAR, collection.get(2));
     }
 
+    @Test
+    void countOccurrencesAsyncCountsDuplicates() {
+        MovieCollection collection = new MovieCollection(MATRIX, TITANIC, MATRIX, MATRIX);
+
+        assertEquals(3, collection.countOccurrencesAsync(MATRIX).join());
+        assertEquals(1, collection.countOccurrencesAsync(TITANIC).join());
+    }
+
+    @Test
+    void countOccurrencesAsyncReturnsZeroForAbsentElement() {
+        MovieCollection collection = new MovieCollection(MATRIX, TITANIC);
+
+        assertEquals(0, collection.countOccurrencesAsync(INTERSTELLAR).join());
+    }
+
+    @Test
+    void countOccurrencesAsyncOnEmptyCollection() {
+        MovieCollection collection = new MovieCollection();
+
+        assertEquals(0, collection.countOccurrencesAsync(MATRIX).join());
+    }
+
+    @Test
+    void countOccurrencesAsyncSplitsCollectionsAboveChunkSize() {
+        MovieCollection collection = new MovieCollection();
+        for (int i = 0; i < 10; i++) {
+            collection.add(i % 3 == 0 ? MATRIX : TITANIC);
+        }
+
+        assertEquals(4, collection.countOccurrencesAsync(MATRIX).join());
+        assertEquals(6, collection.countOccurrencesAsync(TITANIC).join());
+    }
+
     private static Movie build(String name, String genre, int year) {
         return new Movie.Builder()
                 .name(name)
