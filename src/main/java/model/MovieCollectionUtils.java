@@ -1,7 +1,4 @@
-package utils;
-
-import model.Movie;
-import model.MovieCollection;
+package model;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +12,7 @@ public class MovieCollectionUtils {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    public static void saveToFile(MovieCollection movies, Path filePath) {
+    public static void appendToFile(MovieCollection movies, Path filePath) {
         try {
             List<String> lines = movies.stream()
                     .map(Movie::toString)

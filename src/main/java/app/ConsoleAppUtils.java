@@ -8,7 +8,7 @@ public class ConsoleAppUtils {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    public static int askDesiredCollectionSize(Scanner scanner) {
+    public static int tryAskDesiredCollectionSize(Scanner scanner) {
         while (true) {
             System.out.print("Введите желаемый размер коллекции: ");
             String input = scanner.nextLine().trim();
