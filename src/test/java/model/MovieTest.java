@@ -25,45 +25,45 @@ class MovieTest {
 
     @Test
     void toStringUsesFileFormat() {
-        assertEquals("Матрица;боевик;1999", build("Матрица", "боевик", 1999).toString());
+        assertEquals("Матрица;боевик;1999", buildMovie("Матрица", "боевик", 1999).toString());
     }
 
     @Test
     void rejectsBlankName() {
-        assertThrows(IllegalArgumentException.class, () -> build("", "боевик", 1999));
-        assertThrows(IllegalArgumentException.class, () -> build("   ", "боевик", 1999));
-        assertThrows(IllegalArgumentException.class, () -> build(null, "боевик", 1999));
+        assertThrows(IllegalArgumentException.class, () -> buildMovie("", "боевик", 1999));
+        assertThrows(IllegalArgumentException.class, () -> buildMovie("   ", "боевик", 1999));
+        assertThrows(IllegalArgumentException.class, () -> buildMovie(null, "боевик", 1999));
     }
 
     @Test
     void rejectsBlankGenre() {
-        assertThrows(IllegalArgumentException.class, () -> build("Матрица", "", 1999));
-        assertThrows(IllegalArgumentException.class, () -> build("Матрица", "   ", 1999));
-        assertThrows(IllegalArgumentException.class, () -> build("Матрица", null, 1999));
+        assertThrows(IllegalArgumentException.class, () -> buildMovie("Матрица", "", 1999));
+        assertThrows(IllegalArgumentException.class, () -> buildMovie("Матрица", "   ", 1999));
+        assertThrows(IllegalArgumentException.class, () -> buildMovie("Матрица", null, 1999));
     }
 
     @Test
     void rejectsYearBeforeFirstFilm() {
-        assertThrows(IllegalArgumentException.class, () -> build("Матрица", "боевик", 0));
-        assertThrows(IllegalArgumentException.class, () -> build("Матрица", "боевик", 1894));
-        assertThrows(IllegalArgumentException.class, () -> build("Матрица", "боевик", Integer.MIN_VALUE));
+        assertThrows(IllegalArgumentException.class, () -> buildMovie("Матрица", "боевик", 0));
+        assertThrows(IllegalArgumentException.class, () -> buildMovie("Матрица", "боевик", 1894));
+        assertThrows(IllegalArgumentException.class, () -> buildMovie("Матрица", "боевик", Integer.MIN_VALUE));
     }
 
     @Test
     void rejectsFutureYear() {
-        assertThrows(IllegalArgumentException.class, () -> build("Матрица", "боевик", CURRENT_YEAR + 1));
+        assertThrows(IllegalArgumentException.class, () -> buildMovie("Матрица", "боевик", CURRENT_YEAR + 1));
     }
 
     @Test
     void acceptsBoundaryYears() {
-        assertEquals(1895, build("Матрица", "боевик", 1895).getReleaseYear());
-        assertEquals(CURRENT_YEAR, build("Матрица", "боевик", CURRENT_YEAR).getReleaseYear());
+        assertEquals(1895, buildMovie("Матрица", "боевик", 1895).getReleaseYear());
+        assertEquals(CURRENT_YEAR, buildMovie("Матрица", "боевик", CURRENT_YEAR).getReleaseYear());
     }
 
     @Test
     void equalMoviesAreEqual() {
-        Movie first = build("Матрица", "боевик", 1999);
-        Movie second = build("Матрица", "боевик", 1999);
+        Movie first = buildMovie("Матрица", "боевик", 1999);
+        Movie second = buildMovie("Матрица", "боевик", 1999);
 
         assertEquals(first, second);
         assertEquals(first.hashCode(), second.hashCode());
@@ -72,22 +72,22 @@ class MovieTest {
     @Test
     void differentMoviesAreNotEqual() {
         assertNotEquals(
-                build("Матрица", "боевик", 1999),
-                build("Матрица", "боевик", 2000)
+                buildMovie("Матрица", "боевик", 1999),
+                buildMovie("Матрица", "боевик", 2000)
         );
 
         assertNotEquals(
-                build("Титаник", "боевик", 1999),
-                build("Матрица", "боевик", 1999)
+                buildMovie("Титаник", "боевик", 1999),
+                buildMovie("Матрица", "боевик", 1999)
         );
 
         assertNotEquals(
-                build("Матрица", "комедия", 1999),
-                build("Матрица", "боевик", 1999)
+                buildMovie("Матрица", "комедия", 1999),
+                buildMovie("Матрица", "боевик", 1999)
         );
     }
 
-    private static Movie build(String name, String genre, int year) {
+    private static Movie buildMovie(String name, String genre, int year) {
         return new Movie.Builder()
                 .name(name)
                 .genre(genre)
